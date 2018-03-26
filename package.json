@@ -1,0 +1,24 @@
+{
+  "name": "nightmare-firebase-web-scraper",
+  "version": "0.0.1",
+  "description": "A browser automation script with nightmare.js that navigates to a page and saves some information to a firebase database.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JimTheMan/Nightmare-Firebase-Web-Scraper.git"
+  },
+  "author": "Jim Lynch",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/JimTheMan/Nightmare-Firebase-Web-Scraper/issues"
+  },
+  "homepage": "https://github.com/JimTheMan/Nightmare-Firebase-Web-Scraper#readme",
+  "dependencies": {
+    "firebase": "^4.12.0",
+    "firebase-admin": "^5.11.0",
+    "nightmare": "^3.0.0"
+  }
+}
