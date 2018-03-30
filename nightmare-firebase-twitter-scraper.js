@@ -1,80 +1,55 @@
 const Nightmare = require('nightmare');
 const firebase = require('firebase');
-const nightmare = Nightmare({show: true});
+const nightmare = Nightmare({show: false});
 const admin = require('firebase-admin');
-const caller = require('./firebase-write-helper');
+const firebaseWrite = require('./firebase-write-helper');
 const creds = require('./.creds');
 
 console.log('creds: ' + creds.username);
 
-async function find(ctx) {
-    const derp2 = await nightmare
+
+async function scrape(ctx) {
+
+    let findAndSave = nightmare;
+
+    const ok = await findAndSave
         .on('console', (log, msg) => {
             console.log(msg)
         })
         .goto('https://twitter.com/login')
-        .type('input[placeholder="Phone, email, or username"]', '@sdfsdfsd')
-        .type('input.js-password-field', 'sdfsdfsdf')
+        .wait('input[placeholder="Phone, email, or username"]')
+        .type('input[placeholder="Phone, email, or username"]', creds.username)
+        .type('input.js-password-field', creds.password)
         .click('button[type="submit"]')
         .wait('span.ProfileCardStats-statLabel')
         .evaluate(() => {
-            console.log('yo');
-
             const labels = document.getElementsByClassName('ProfileCardStats-statLabel');
             const values = document.getElementsByClassName('ProfileCardStats-statValue');
-
-            console.log(values[0].textContent);
-            console.log(values[1].textContent);
-            console.log(values[2].textContent);
-
-            console.log('labels ' + labels.length);
-            console.log('values ' + values.length);
-
-
-            return [values[0].textContent, values[1].textContent, values[2].textContent]
+            return {
+                "likes": values[0].textContent,
+                "following": values[1].textContent,
+                "followers": values[2].textContent
+            }
 
         })
         .then((twitterValues) => {
-
-            console.log('twitterValues ', twitterValues)
-
             return new Promise((resolve, reject) => {
-                caller(twitterValues).then(() => {
-                    console.log('caller called')
+                firebaseWrite(twitterValues).then(() => {
+                    console.log('resolving');
                     resolve("ok");
                 });
+            }).then( (done)=> {
+                console.log('now done really ' + done)
+                return "ok";
+            }).catch( (error)=> {
+                console.log('error: ', error)
             })
 
         })
 
-
-    const derp3 = await nightmare
-        .evaluate(() => {
-
-
-            // console.log('hey');
-
-
-            function test2() {
-                console.log("Hello Frofsdfaskl,hjkjdfm Test.");
-                //
-                // const labels = document.getElementsByClassName('span.ProfileCardStats-statLabel');
-                // const values = document.getElementsByClassName('span.ProfileCardStats-statValue');
-                //
-                // console.log('labels ' + labels.length);
-                // console.log('values ' + values.length);
-
-            }
-
-            test2()
-        })
-
-    // console.log('nightmare was ' + derp2);
-
-
-    process.exit(0)
     console.log('done.')
+    process.exit(0)
 }
 
 
-find();
+scrape();

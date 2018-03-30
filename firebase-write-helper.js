@@ -44,7 +44,7 @@ module.exports = function (twitterValues) {
         }).then((done) => {
             console.log('done! ', done)
 
-            resolve(done);
+            resolve("ok");
         });
 
     });

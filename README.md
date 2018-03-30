@@ -77,15 +77,20 @@ After scraping, your database should look something like this:
 }
 ```
 
+Since we are using the firebase NoSql object-style database, I just have a root database node named 'save-by-date-test'.
+
+The children on this object are created from JavaScript's `date.getTime()`. This is great because you can take these database keys and feed it into a new Date function JavaScript to get that exact point in time, down to the second, that the scraping went down.
+ 
+As so we essentially have a method for create time-series data. We can then do all sorts of cool stuff with the data like building charts and graphs, doing time-series analysis, and applying machine learning. 
+
 
 ## Run Nightmare Twitter Scraper
 
+```
+node nightmare-firebase-twitter-scraper.js
+```
 
-Since we are using the firebase NoSql object-style database, I just have a root database node named 'save-by-date-test'.
 
-The children on this object are created from JavaScript's `date.getTime()`. This is great because you can take these database keys and feed it into a new Date function JavaScript to get that exact point in time that the scraping went down.
- 
-As so we essentially have a method for create time-series data. We can then do all sorts of cool stuff with the data like building charts and graphs, doing time-series analysis, and applying machine learning. 
 
 
 
