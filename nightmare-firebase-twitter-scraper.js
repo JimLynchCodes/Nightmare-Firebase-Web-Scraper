@@ -1,6 +1,6 @@
 const Nightmare = require('nightmare');
 const firebase = require('firebase');
-const nightmare = Nightmare({show: false});
+const nightmare = Nightmare({show: true});
 const admin = require('firebase-admin');
 const firebaseWrite = require('./firebase-write-helper');
 const creds = require('./.creds');
@@ -8,7 +8,7 @@ const creds = require('./.creds');
 console.log('creds: ' + creds.username);
 
 
-async function scrape(ctx) {
+async function scrape(resolve, reject) {
 
     let findAndSave = nightmare;
 
@@ -17,11 +17,13 @@ async function scrape(ctx) {
             console.log(msg)
         })
         .goto('https://twitter.com/login')
+        .wait(3000)
         .wait('input[placeholder="Phone, email, or username"]')
         .type('input[placeholder="Phone, email, or username"]', creds.username)
         .type('input.js-password-field', creds.password)
         .click('button[type="submit"]')
-        .wait('span.ProfileCardStats-statLabel')
+        .wait(3000)
+        // .wait('span.ProfileCardStats-statLabel')
         .evaluate(() => {
             const labels = document.getElementsByClassName('ProfileCardStats-statLabel');
             const values = document.getElementsByClassName('ProfileCardStats-statValue');
@@ -33,16 +35,18 @@ async function scrape(ctx) {
 
         })
         .then((twitterValues) => {
+            console.log("calling to firebase...");
             return new Promise((resolve, reject) => {
-                firebaseWrite(twitterValues).then(() => {
-                    console.log('resolving');
-                    resolve("ok");
+                firebaseWrite(twitterValues).then((ok) => {
+                    console.log('firebase wrote! resolving');
+                    resolve(ok);
                 });
             }).then( (done)=> {
                 console.log('now done really ' + done)
-                return "ok";
+                resolve('ok')
             }).catch( (error)=> {
                 console.log('error: ', error)
+              reject(error);
             })
 
         })
@@ -51,5 +55,9 @@ async function scrape(ctx) {
     process.exit(0)
 }
 
+module.exports = new Promise( (resolve, reject) => {
+  return scrape(resolve, reject);
+})
 
-scrape();
+
+

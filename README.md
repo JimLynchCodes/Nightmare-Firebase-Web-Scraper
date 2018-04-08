@@ -1,5 +1,26 @@
-# Nightmare-Firebase-Web-Scraper
+# Jim's "All 3" Nightmare Firebase Twitter WebScraper
+
+Template for easy browser automation on ci and lambda.
+
+
+Jim's is (as are many other web ui automation experts) very excited about [NightareJs](https://github.com/segmentio/nightmare).
+
+I like to call it an "all 3" framework because you can easily run it:
+
+- locally in your command shell.
+- on a continutous integration platform.
+- as a serverless function on aws lambda (and in theory any other serverless providers of current nodejs versions).
+
+I don't know about you, but whenever I use selenium or similar technologies it is never easy to just switch over to headless mode, and many valiant efforts may result in missing drivers or "xvfb errors". 
+
+
+
+
+
+
+
 A browser automation script with nightmare.js that navigates to a page and saves some information to a firebase database.
+
 
 
 # Usage
